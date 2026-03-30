@@ -1,10 +1,10 @@
-export const BASE_URL = 'https://dev.natureland.hipster-virtual.com';
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
 export const API_BASE = `${BASE_URL}/api/v1`;
 
-export const COMPANY_ID = '1';
-export const OUTLET_ID = '1';
-export const OUTLET_TYPE = '2';
-export const PANEL = 'outlet';
+export const COMPANY_ID = import.meta.env.VITE_COMPANY_ID;
+export const OUTLET_ID = import.meta.env.VITE_OUTLET_ID;
+export const OUTLET_TYPE = import.meta.env.VITE_OUTLET_TYPE;
+export const PANEL = import.meta.env.VITE_PANEL;
 
 export const GENDER_COLORS = {
   female: '#EC4899',
