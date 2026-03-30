@@ -1,22 +1,124 @@
-# Spa-booking
-Spa Booking app
+# Spa Booking Management System
 
-React JS Developer Assessment
+A therapist schedule and booking management app built for spa/salon outlets. Provides an interactive calendar view with real-time booking visualization, optimized to handle ~2000 bookings per day.
 
-Design references are provided in the Figma files at bottom of the page.
-Backend APIs will be provided for the following operations:
-● List bookings
-● Create booking
-● Update booking
-● Delete booking
+---
 
-2. Booking Calendar UI
-Build a therapist schedule calendar similar to the provided design.
-Calendar characteristics:
-● Time grid (15-minute interval)
-● Therapists displayed horizontally
-● Time displayed vertically
-● Bookings rendered as blocks
+## Tech Stack
+
+- **React 19** with Vite 8
+- **Zustand** for state management
+- **dayjs** for date/time handling
+- **react-window** for virtual scrolling
+
+## Features
+
+- Interactive calendar with 15-min time grid (7 AM – 11 PM)
+- Therapist columns with gender-based color coding
+- Booking CRUD — create, view, edit, status updates, cancel, delete
+- Client search with inline creation
+- Room availability checking
+- Service & therapist assignment with duration/price auto-fill
+- Optimistic UI updates with automatic rollback on failure
+- LocalStorage caching with TTL (5 min bookings, 10 min therapists/services)
+- Horizontal virtualization for large therapist lists
+- Toast notifications & error boundaries
+
+## Project Structure
+
+```
+src/
+├── api/            # API client & endpoint modules
+│   ├── client.js   # HTTP wrapper (auth, timeout, error handling)
+│   ├── auth.js     # Login
+│   ├── bookings.js # Booking CRUD endpoints
+│   ├── therapists.js
+│   ├── services.js
+│   ├── rooms.js
+│   └── users.js    # Client/user search & creation
+├── components/     # UI components
+│   ├── CalendarGrid.jsx    # Virtualized calendar with time slots
+│   ├── CalendarToolbar.jsx # Date nav, search, filters
+│   ├── BookingBlock.jsx    # Individual booking display
+│   ├── BookingPanel.jsx    # Side panel (view/edit/create)
+│   ├── BookingForm.jsx     # Booking create/edit form
+│   ├── LoginForm.jsx       # Authentication
+│   ├── Toast.jsx           # Notifications
+│   └── ErrorBoundary.jsx   # Error fallback
+├── pages/
+│   └── CalendarPage.jsx    # Main page orchestrator
+├── store/          # Zustand stores
+│   ├── authStore.js        # Auth & session
+│   ├── bookingStore.js     # Bookings with optimistic updates
+│   ├── therapistStore.js   # Therapist data & timings
+│   ├── serviceStore.js     # Service categories
+│   └── uiStore.js          # Panel state, toasts, filters
+└── utils/
+    ├── constants.js  # Config from env vars, app constants
+    ├── cache.js      # localStorage wrapper with TTL
+    ├── helpers.js    # Time conversion, date parsing, debounce
+    └── logger.js     # In-memory logger (last 1000 entries)
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+
+### Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Create environment file
+cp .env.example .env
+```
+
+### Environment Variables
+
+| Variable | Description | Example |
+|---|---|---|
+| `VITE_BASE_URL` | Backend API base URL | `https://dev.natureland.hipster-virtual.com` |
+| `VITE_COMPANY_ID` | Company identifier | `1` |
+| `VITE_OUTLET_ID` | Outlet identifier | `1` |
+| `VITE_OUTLET_TYPE` | Outlet type | `2` |
+| `VITE_PANEL` | Panel type | `outlet` |
+
+### Run
+
+```bash
+# Development
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## API Endpoints
+
+All requests go through `{VITE_BASE_URL}/api/v1`. The API client auto-injects Bearer tokens and handles 401 (auto-logout), timeouts (30s), and error standardization.
+
+| Module | Endpoint | Method |
+|---|---|---|
+| Auth | `/login` | POST |
+| Bookings | `/bookings/outlet/booking/list` | GET |
+| Bookings | `/bookings/create` | POST |
+| Bookings | `/bookings/{id}` | POST |
+| Bookings | `/bookings/update/payment-status` | POST |
+| Bookings | `/bookings/item/cancel` | POST |
+| Bookings | `/bookings/destroy/{id}` | DELETE |
+| Therapists | `/therapists` | GET |
+| Therapists | `/therapist-timings` | GET |
+| Services | `/service-category` | GET |
+| Rooms | `/room-bookings/outlet/{id}` | GET |
+| Users | `/users` | GET |
+| Users | `/users/create` | POST |
 
 Your UI must be designed so that it does not lag under this load.
 Important considerations:
